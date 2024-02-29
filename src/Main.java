@@ -1,6 +1,8 @@
+import ru.app.tasktracker.App;
+
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Поехали!");
+        App app = new App();
     }
 }
