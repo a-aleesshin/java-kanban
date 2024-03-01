@@ -62,11 +62,18 @@ public class Task {
                 Objects.equals(description, task.description);
     }
 
+    @Override
     public int hashCode() {
         return Objects.hash(id, name, status, description);
     }
 
+    @Override
     public String toString() {
-        return "Task{" + "id=" + id + ", name='" + name + '\'' + ", status=" + status + ", description='" + description + '\'' + '}';
+        return "Task{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
