@@ -6,7 +6,7 @@ import ru.app.tasktracker.manager.BaseManager;
 
 import java.util.Objects;
 
-public class Task implements ITask {
+public class Task {
     private Integer id;
     private String name;
     private EStatus status;
@@ -22,22 +22,18 @@ public class Task implements ITask {
         this.id = id;
     }
 
-    @Override
     public Integer getId() {
         return this.id;
     }
 
-    @Override
     public String getName() {
         return this.name;
     }
 
-    @Override
     public EStatus getStatus() {
         return this.status;
     }
 
-    @Override
     public String getDescription() {
         return this.description;
     }
@@ -54,31 +50,23 @@ public class Task implements ITask {
         this.description = description;
     }
 
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         Task task = (Task) o;
 
-        return  Objects.equals(id, task.id) &&
+        return Objects.equals(id, task.id) &&
                 Objects.equals(name, task.name) &&
                 status == task.status &&
                 Objects.equals(description, task.description);
     }
 
-    @Override
     public int hashCode() {
         return Objects.hash(id, name, status, description);
     }
 
-    @Override
     public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", status=" + status +
-                ", description='" + description + '\'' +
-                '}';
+        return "Task{" + "id=" + id + ", name='" + name + '\'' + ", status=" + status + ", description='" + description + '\'' + '}';
     }
 }

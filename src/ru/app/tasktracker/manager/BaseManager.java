@@ -12,9 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class BaseManager implements IManager {
-    private HashMap<Integer,Task> tasks;
-    private HashMap<Integer,Epic> epics;
-    private HashMap<Integer,SubTask> subTasks;
+    private HashMap<Integer, Task> tasks;
+    private HashMap<Integer, Epic> epics;
+    private HashMap<Integer, SubTask> subTasks;
     private int id = 0;
 
     public BaseManager() {
@@ -68,14 +68,19 @@ public class BaseManager implements IManager {
     }
 
     @Override
-    public HashMap<Integer,Epic> getEpics() {
-        return this.epics;
+    public ArrayList<Epic> getEpics() {
+        if (epics.size() == 0) {
+            System.out.println("Epic list is empty");
+            return new ArrayList<>();
+        }
+
+        return new ArrayList<>(epics.values());
     }
 
     @Override
     public void createEpic(Epic epic) {
-       epic.setId(generateId());
-       epics.put(epic.getId(), epic);
+        epic.setId(generateId());
+        epics.put(epic.getId(), epic);
     }
 
     @Override
@@ -84,8 +89,6 @@ public class BaseManager implements IManager {
             Epic updateEpic = epics.get(epic.getId());
             updateEpic.setName(epic.getName());
             updateEpic.setDescription(epic.getDescription());
-
-            calculateStatus(epic);
         } else {
             System.out.println("Epic not found");
         }
@@ -95,9 +98,7 @@ public class BaseManager implements IManager {
     public void deleteEpic(int epicId) {
         Epic epic = epics.get(epicId);
         if (epic != null) {
-            for (Integer subtaskId : epic.getSubtaskIds()) {
-                subTasks.remove(subtaskId);
-            }
+            epic.clearSubtasks();
             epics.remove(id);
         } else {
             System.out.println("Epic not found");
@@ -146,8 +147,12 @@ public class BaseManager implements IManager {
     }
 
     @Override
-    public HashMap<Integer,SubTask> getSubTasks() {
-        return this.subTasks;
+    public ArrayList<SubTask> getSubTasks() {
+        if (subTasks.size() == 0) {
+            System.out.println("Subtasks list is empty");
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(subTasks.values());
     }
 
     public SubTask getSubTaskById(Integer id) {
@@ -195,7 +200,7 @@ public class BaseManager implements IManager {
 
         if (subtask != null) {
             Epic epic = epics.get(subtask.getEpicId());
-            epic.getSubtaskIds().remove(subtask.getId());
+            epic.deleteSubtask(subtask.getId());
             calculateStatus(epic);
             subTasks.remove(subtask.getId());
         } else {
@@ -213,9 +218,11 @@ public class BaseManager implements IManager {
         if (epics.containsKey(id)) {
             ArrayList<SubTask> subtasksNew = new ArrayList<>();
             Epic epic = epics.get(id);
-            for (int i = 0; i < epic.getSubtaskIds().size(); i++) {
-                subtasksNew.add(subTasks.get(epic.getSubtaskIds().get(i)));
+
+            for (int subtaskId : epic.getSubtaskIds()) {
+                subtasksNew.add(subTasks.get(subtaskId));
             }
+
             return subtasksNew;
         } else {
             System.out.println("Subtask not found");

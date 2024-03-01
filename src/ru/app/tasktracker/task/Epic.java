@@ -20,6 +20,18 @@ public class Epic extends Task {
         return subtaskIds;
     }
 
+    public void deleteSubtask(int id) {
+        int index = subtaskIds.indexOf(id);
+
+        if (index > -1) {
+            subtaskIds.remove(index);
+        }
+    }
+
+    public void clearSubtasks() {
+        subtaskIds.clear();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
