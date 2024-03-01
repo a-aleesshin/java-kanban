@@ -8,11 +8,11 @@ import java.util.Objects;
 public class Epic extends Task {
     private final ArrayList<Integer> subtaskIds = new ArrayList<>();
 
-    public Epic(String name, EStatus status, String description) {
-        super(name, status, description);
+    public Epic(String name, String description) {
+        super(name, EStatus.NEW, description);
     }
 
-    public void addSubTaskId(Integer id) {
+    public void addSubTaskId(int id) {
         subtaskIds.add(id);
     }
 

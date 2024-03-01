@@ -7,6 +7,7 @@ import ru.app.tasktracker.task.SubTask;
 import ru.app.tasktracker.task.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class BaseManager implements IManager {
     private HashMap<Integer,Task> tasks;
     private HashMap<Integer,Epic> epics;
     private HashMap<Integer,SubTask> subTasks;
-    private static Integer id = 0;
+    private int id = 0;
 
     public BaseManager() {
         this.tasks = new HashMap<>();
@@ -22,34 +23,47 @@ public class BaseManager implements IManager {
         this.subTasks = new HashMap<>();
     }
 
-    private Integer generateId() {
+    private int generateId() {
         return ++id;
     }
 
     @Override
-    public HashMap<Integer,Task> getTasks() {
-        return this.tasks;
+    public ArrayList<Task> getTasks() {
+        if (tasks.size() == 0) {
+            System.out.println("Task list is empty");
+            return new ArrayList<>();
+        }
+
+        return new ArrayList<>(tasks.values());
     }
 
     @Override
     public void createTask(Task task) {
-        Integer newTaskId = generateId();
+        int newTaskId = generateId();
         task.setId(newTaskId);
         tasks.put(newTaskId, task);
     }
 
     @Override
-    public void updateTask(Integer taskId, Task task) {
-        tasks.put(taskId, task);
+    public void updateTask(Task task) {
+        if (tasks.containsKey(task.getId())) {
+            tasks.put(task.getId(), task);
+        } else {
+            System.out.println("Task not found");
+        }
     }
 
     @Override
-    public void deleteTask(Integer taskId) {
-        tasks.remove(taskId);
+    public void deleteTask(int taskId) {
+        if (tasks.containsKey(id)) {
+            tasks.remove(id);
+        } else {
+            System.out.println("Task not found");
+        }
     }
 
     @Override
-    public Task getTask(Integer taskId) {
+    public Task getTask(int taskId) {
         return tasks.get(taskId);
     }
 
@@ -62,39 +76,50 @@ public class BaseManager implements IManager {
     public void createEpic(Epic epic) {
        epic.setId(generateId());
        epics.put(epic.getId(), epic);
-       calculateStatus(epic);
     }
 
     @Override
-    public void updateEpic(Integer epicId, Epic epic) {
-        epics.put(epicId, epic);
+    public void updateEpic(Epic epic) {
+        if (epics.containsKey(epic.getId())) {
+            Epic updateEpic = epics.get(epic.getId());
+            updateEpic.setName(epic.getName());
+            updateEpic.setDescription(epic.getDescription());
+
+            calculateStatus(epic);
+        } else {
+            System.out.println("Epic not found");
+        }
     }
 
     @Override
-    public void deleteEpic(Integer epicId) {
-        epics.remove(epicId);
+    public void deleteEpic(int epicId) {
+        Epic epic = epics.get(epicId);
+        if (epic != null) {
+            for (Integer subtaskId : epic.getSubtaskIds()) {
+                subTasks.remove(subtaskId);
+            }
+            epics.remove(id);
+        } else {
+            System.out.println("Epic not found");
+        }
     }
 
     @Override
-    public Epic getEpic(Integer epicId) {
+    public Epic getEpic(int epicId) {
         return epics.get(epicId);
     }
 
-    @Override
-    public void calculateStatus(Epic epic) {
+    private void calculateStatus(Epic epic) {
         if (epics.containsKey(epic.getId())) {
             if (epic.getSubtaskIds().size() == 0) {
                 epic.setStatus(EStatus.NEW);
             } else {
-                ArrayList<SubTask> subtasksNew = new ArrayList<>();
                 int countDone = 0;
                 int countNew = 0;
 
-                for (int i = 0; i < epic.getSubtaskIds().size(); i++) {
-                    subtasksNew.add(subTasks.get(epic.getSubtaskIds().get(i)));
-                }
+                for (int subtaskId : epic.getSubtaskIds()) {
+                    SubTask subtask = subTasks.get(subtaskId);
 
-                for (SubTask subtask : subtasksNew) {
                     if (subtask.getStatus() == EStatus.DONE) {
                         countDone++;
                     }
@@ -130,8 +155,8 @@ public class BaseManager implements IManager {
     }
 
     @Override
-    public Integer createSubTask(SubTask subTask) {
-        Integer newSubtaskId = generateId();
+    public int createSubTask(SubTask subTask) {
+        int newSubtaskId = generateId();
         subTask.setId(newSubtaskId);
 
         Epic epic = epics.get(subTask.getEpicId());
@@ -149,9 +174,9 @@ public class BaseManager implements IManager {
     }
 
     @Override
-    public void updateSubTask(Integer subTaskId, SubTask subTask) {
-        if (subTasks.containsKey(subTaskId)) {
-            SubTask subTaskUpdate = subTasks.get(subTaskId);
+    public void updateSubTask(SubTask subTask) {
+        if (subTasks.containsKey(subTask.getId())) {
+            SubTask subTaskUpdate = subTasks.get(subTask.getId());
             subTasks.put(subTaskUpdate.getId(), subTaskUpdate);
             Epic epic = epics.get(subTaskUpdate.getEpicId());
             calculateStatus(epic);
@@ -160,8 +185,12 @@ public class BaseManager implements IManager {
         }
     }
 
+    /**
+     * TODO не совсем понял как можно сделать "лучше сделать epic.deleteSubtask(subTaskId);"
+     * TODO получается нужно вызывать deleteSubtask рекурсивно ? или же нужно создать метод в классе epic у уже там удалять ?
+     */
     @Override
-    public void deleteSubTask(Integer subTaskId) {
+    public void deleteSubTask(int subTaskId) {
         SubTask subtask = subTasks.get(subTaskId);
 
         if (subtask != null) {
@@ -175,9 +204,25 @@ public class BaseManager implements IManager {
     }
 
     @Override
-    public SubTask getSubTask(Integer subTaskId) {
+    public SubTask getSubTask(int subTaskId) {
         return subTasks.get(subTaskId);
     }
+
+    @Override
+    public ArrayList<SubTask> getAllSubtasksByEpicId(int id) {
+        if (epics.containsKey(id)) {
+            ArrayList<SubTask> subtasksNew = new ArrayList<>();
+            Epic epic = epics.get(id);
+            for (int i = 0; i < epic.getSubtaskIds().size(); i++) {
+                subtasksNew.add(subTasks.get(epic.getSubtaskIds().get(i)));
+            }
+            return subtasksNew;
+        } else {
+            System.out.println("Subtask not found");
+            return new ArrayList<>();
+        }
+    }
+
 
     public void printTasks() {
         if (tasks.size() == 0) {

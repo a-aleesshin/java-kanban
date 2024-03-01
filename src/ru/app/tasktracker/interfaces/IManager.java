@@ -11,29 +11,29 @@ public interface IManager {
     /**
      * Base task
      */
-    public HashMap<Integer,Task> getTasks();
+    public ArrayList<Task> getTasks();
     public void createTask(Task task);
-    public void updateTask(Integer taskId, Task task);
-    public void  deleteTask(Integer taskId);
-    public Task getTask(Integer taskId);
+    public void updateTask(Task task);
+    public void  deleteTask(int taskId);
+    public Task getTask(int taskId);
 
     /**
      * Epic
      */
     public HashMap<Integer,Epic> getEpics();
     public void createEpic(Epic epic);
-    public void updateEpic(Integer epicId, Epic Epic);
-    public void  deleteEpic(Integer epicId);
-    public Epic getEpic(Integer epicId);
-    public void calculateStatus(Epic epicSaved);
+    public void updateEpic(Epic Epic);
+    public void  deleteEpic(int epicId);
+    public Epic getEpic(int epicId);
+    public ArrayList<SubTask> getAllSubtasksByEpicId(int id);
 
 
     /**
      * SubTask
      */
     public HashMap<Integer,SubTask> getSubTasks();
-    public Integer createSubTask(SubTask subTask);
-    public void updateSubTask(Integer subTaskId, SubTask subTask);
-    public void  deleteSubTask(Integer subTaskId);
-    public SubTask getSubTask(Integer subTaskId);
+    public int createSubTask(SubTask subTask);
+    public void updateSubTask(SubTask subTask);
+    public void  deleteSubTask(int subTaskId);
+    public SubTask getSubTask(int subTaskId);
 }

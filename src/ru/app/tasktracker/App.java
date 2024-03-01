@@ -25,7 +25,7 @@ public class App {
         System.out.println(taskManager.getTasks());
         System.out.println();
 
-        Epic firstEpic = new Epic("Epic 1", EStatus.NEW, "Epic 1");
+        Epic firstEpic = new Epic("Epic 1", "Epic 1");
         taskManager.createEpic(firstEpic);
 
         Integer firstSubTak = taskManager.createSubTask(new SubTask("SubTask 1", EStatus.NEW, "SubTask task 1", firstEpic.getId()));
@@ -36,17 +36,17 @@ public class App {
         System.out.println();
 
         taskManager.getSubTaskById(firstSubTak).setStatus(EStatus.DONE);
-        taskManager.updateSubTask(firstSubTak, taskManager.getSubTaskById(firstSubTak));
+        taskManager.updateSubTask(taskManager.getSubTaskById(firstSubTak));
 
         taskManager.getSubTaskById(secondSubTak).setStatus(EStatus.DONE);
-        taskManager.updateSubTask(secondSubTak, taskManager.getSubTaskById(secondSubTak));
+        taskManager.updateSubTask(taskManager.getSubTaskById(secondSubTak));
 
         System.out.println(taskManager.getSubTasks());
         System.out.println(taskManager.getEpic(firstEpic.getId()));
         System.out.println();
 
         taskManager.getSubTaskById(thirdSubTak).setStatus(EStatus.DONE);
-        taskManager.updateSubTask(thirdSubTak, taskManager.getSubTaskById(thirdSubTak));
+        taskManager.updateSubTask(taskManager.getSubTaskById(thirdSubTak));
 
         System.out.println(taskManager.getSubTasks());
         System.out.println(taskManager.getEpic(firstEpic.getId()));
@@ -54,10 +54,10 @@ public class App {
         System.out.println();
 
         taskManager.getSubTaskById(firstSubTak).setStatus(EStatus.IN_PROGRESS);
-        taskManager.updateSubTask(firstSubTak, taskManager.getSubTaskById(firstSubTak));
+        taskManager.updateSubTask(taskManager.getSubTaskById(firstSubTak));
 
         taskManager.getSubTaskById(secondSubTak).setStatus(EStatus.IN_PROGRESS);
-        taskManager.updateSubTask(secondSubTak, taskManager.getSubTaskById(secondSubTak));
+        taskManager.updateSubTask(taskManager.getSubTaskById(secondSubTak));
 
         System.out.println("----------------------");
         System.out.println(taskManager.getSubTasks());
@@ -75,7 +75,7 @@ public class App {
         System.out.println("=======================");
 
 
-        Epic secondEpic = new Epic("Epic 2", EStatus.NEW, "Epic 2");
+        Epic secondEpic = new Epic("Epic 2", "Epic 2");
         taskManager.createEpic(secondEpic);
 
         taskManager.createSubTask(new SubTask("SubTask 4", EStatus.NEW, "SubTask task 4", secondEpic.getId()));

@@ -5,14 +5,14 @@ import ru.app.tasktracker.enums.EStatus;
 import java.util.Objects;
 
 public class SubTask extends Task {
-    private final Integer epicId;
+    private final int epicId;
 
-    public SubTask(String name, EStatus status, String description, Integer epicId) {
+    public SubTask(String name, EStatus status, String description, int epicId) {
         super(name, status, description);
         this.epicId = epicId;
     }
 
-    public Integer getEpicId() {
+    public int getEpicId() {
         return epicId;
     }
 
