@@ -1,13 +1,11 @@
 package ru.app.tasktracker.task;
 
 import ru.app.tasktracker.enums.EStatus;
-import ru.app.tasktracker.interfaces.ITask;
-import ru.app.tasktracker.manager.BaseManager;
 
 import java.util.Objects;
 
 public class Task {
-    private Integer id;
+    private int id;
     private String name;
     private EStatus status;
     private String description;
@@ -18,11 +16,11 @@ public class Task {
         this.description = description;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public int getId() {
         return this.id;
     }
 
