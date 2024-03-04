@@ -6,8 +6,14 @@ import ru.app.tasktracker.task.SubTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public interface IManager {
+    /**
+     * Manager
+     */
+    public List<Task> getHistory();
+
     /**
      * Base task
      */
@@ -49,4 +55,6 @@ public interface IManager {
     public void deleteSubTask(int subTaskId);
 
     public SubTask getSubTask(int subTaskId);
+
+    public SubTask getSubTaskById(int id);
 }

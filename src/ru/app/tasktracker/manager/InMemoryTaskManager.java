@@ -1,30 +1,37 @@
 package ru.app.tasktracker.manager;
 
 import ru.app.tasktracker.enums.EStatus;
+import ru.app.tasktracker.interfaces.IHistoryManager;
 import ru.app.tasktracker.interfaces.IManager;
 import ru.app.tasktracker.task.Epic;
 import ru.app.tasktracker.task.SubTask;
 import ru.app.tasktracker.task.Task;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class BaseManager implements IManager {
+public class InMemoryTaskManager implements IManager {
     private HashMap<Integer, Task> tasks;
     private HashMap<Integer, Epic> epics;
     private HashMap<Integer, SubTask> subTasks;
+    private final IHistoryManager historyManager;
     private int id = 0;
 
-    public BaseManager() {
+    public InMemoryTaskManager(IHistoryManager historyManager) {
         this.tasks = new HashMap<>();
         this.epics = new HashMap<>();
         this.subTasks = new HashMap<>();
+        this.historyManager = historyManager;
     }
 
     private int generateId() {
         return ++id;
+    }
+
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
     }
 
     @Override
@@ -64,6 +71,7 @@ public class BaseManager implements IManager {
 
     @Override
     public Task getTask(int taskId) {
+        historyManager.add(tasks.get(taskId));
         return tasks.get(taskId);
     }
 
@@ -107,6 +115,7 @@ public class BaseManager implements IManager {
 
     @Override
     public Epic getEpic(int epicId) {
+        historyManager.add(epics.get(epicId));
         return epics.get(epicId);
     }
 
@@ -155,7 +164,7 @@ public class BaseManager implements IManager {
         return new ArrayList<>(subTasks.values());
     }
 
-    public SubTask getSubTaskById(Integer id) {
+    public SubTask getSubTaskById(int id) {
         return subTasks.get(id);
     }
 
@@ -190,10 +199,6 @@ public class BaseManager implements IManager {
         }
     }
 
-    /**
-     * TODO не совсем понял как можно сделать "лучше сделать epic.deleteSubtask(subTaskId);"
-     * TODO получается нужно вызывать deleteSubtask рекурсивно ? или же нужно создать метод в классе epic у уже там удалять ?
-     */
     @Override
     public void deleteSubTask(int subTaskId) {
         SubTask subtask = subTasks.get(subTaskId);
@@ -210,6 +215,7 @@ public class BaseManager implements IManager {
 
     @Override
     public SubTask getSubTask(int subTaskId) {
+        historyManager.add(subTasks.get(subTaskId));
         return subTasks.get(subTaskId);
     }
 
