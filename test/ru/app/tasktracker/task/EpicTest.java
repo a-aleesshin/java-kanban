@@ -34,6 +34,7 @@ class EpicTest {
         Epic epic = new Epic("Эпик", "Описание эпика");
         SubTask subtask = new SubTask("Подзадача", EStatus.NEW, "Описание подзадачи", 1);
         epic.addSubTaskId(subtask.getId());
+
         assertTrue(epic.getSubtaskIds().contains(subtask.getId()));
     }
 }
