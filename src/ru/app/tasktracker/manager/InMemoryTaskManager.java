@@ -6,6 +6,7 @@ import ru.app.tasktracker.interfaces.IManager;
 import ru.app.tasktracker.task.Epic;
 import ru.app.tasktracker.task.SubTask;
 import ru.app.tasktracker.task.Task;
+import ru.app.tasktracker.util.Managers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,11 +19,11 @@ public class InMemoryTaskManager implements IManager {
     private final IHistoryManager historyManager;
     private int id = 0;
 
-    public InMemoryTaskManager(IHistoryManager historyManager) {
+    public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
         this.epics = new HashMap<>();
         this.subTasks = new HashMap<>();
-        this.historyManager = historyManager;
+        this.historyManager = Managers.getDefaultHistory();
     }
 
     private int generateId() {
@@ -35,7 +36,7 @@ public class InMemoryTaskManager implements IManager {
     }
 
     @Override
-    public ArrayList<Task> getTasks() {
+    public List<Task> getTasks() {
         if (tasks.size() == 0) {
             System.out.println("Task list is empty");
             return new ArrayList<>();
@@ -71,12 +72,13 @@ public class InMemoryTaskManager implements IManager {
 
     @Override
     public Task getTask(int taskId) {
-        historyManager.add(tasks.get(taskId));
-        return tasks.get(taskId);
+        Task task = tasks.get(taskId);
+        historyManager.add(task);
+        return task;
     }
 
     @Override
-    public ArrayList<Epic> getEpics() {
+    public List<Epic> getEpics() {
         if (epics.size() == 0) {
             System.out.println("Epic list is empty");
             return new ArrayList<>();
@@ -156,7 +158,7 @@ public class InMemoryTaskManager implements IManager {
     }
 
     @Override
-    public ArrayList<SubTask> getSubTasks() {
+    public List<SubTask> getSubTasks() {
         if (subTasks.size() == 0) {
             System.out.println("Subtasks list is empty");
             return new ArrayList<>();
@@ -165,6 +167,7 @@ public class InMemoryTaskManager implements IManager {
     }
 
     public SubTask getSubTaskById(int id) {
+        historyManager.add(subTasks.get(id));
         return subTasks.get(id);
     }
 
@@ -214,13 +217,7 @@ public class InMemoryTaskManager implements IManager {
     }
 
     @Override
-    public SubTask getSubTask(int subTaskId) {
-        historyManager.add(subTasks.get(subTaskId));
-        return subTasks.get(subTaskId);
-    }
-
-    @Override
-    public ArrayList<SubTask> getAllSubtasksByEpicId(int id) {
+    public List<SubTask> getAllSubtasksByEpicId(int id) {
         if (epics.containsKey(id)) {
             ArrayList<SubTask> subtasksNew = new ArrayList<>();
             Epic epic = epics.get(id);

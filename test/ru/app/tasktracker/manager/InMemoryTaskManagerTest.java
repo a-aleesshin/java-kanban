@@ -18,7 +18,7 @@ class InMemoryTaskManagerTest {
 
     @BeforeEach
     void setUp() {
-        taskManager = new InMemoryTaskManager(Managers.getDefaultHistory());
+        taskManager = new InMemoryTaskManager();
     }
 
     @Test
@@ -87,7 +87,7 @@ class InMemoryTaskManagerTest {
 
         assertEquals(task, taskManager.getTask(task.getId()), "Задачи не совпадают.");
         assertEquals(epic, taskManager.getEpic(epic.getId()), "Эпики не совпадают.");
-        assertEquals(subtask, taskManager.getSubTask(subtask.getId()), "Подзадачи не совпадают.");
+        assertEquals(subtask, taskManager.getSubTaskById(subtask.getId()), "Подзадачи не совпадают.");
     }
 
     @Test
@@ -120,7 +120,7 @@ class InMemoryTaskManagerTest {
 
     @Test
     void testIdConflict() {
-        InMemoryTaskManager taskManager = new InMemoryTaskManager(new InMemoryHistoryManager());
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
 
         Task taskWithId = new Task("Задача 1", EStatus.NEW, "Явное указание id таска");
         taskWithId.setId(1);
