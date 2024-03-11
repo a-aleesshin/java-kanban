@@ -7,7 +7,7 @@ import ru.app.tasktracker.manager.InMemoryTaskManager;
 
 public class Managers {
     public static IManager getInMemoryTaskManager(IHistoryManager historyManager) {
-        return new InMemoryTaskManager(historyManager);
+        return new InMemoryTaskManager();
     }
 
     public static IHistoryManager getDefaultHistory() {

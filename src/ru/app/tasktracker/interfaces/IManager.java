@@ -17,7 +17,7 @@ public interface IManager {
     /**
      * Base task
      */
-    public ArrayList<Task> getTasks();
+    public List<Task> getTasks();
 
     public void createTask(Task task);
 
@@ -30,7 +30,7 @@ public interface IManager {
     /**
      * Epic
      */
-    public ArrayList<Epic> getEpics();
+    public List<Epic> getEpics();
 
     public void createEpic(Epic epic);
 
@@ -40,21 +40,19 @@ public interface IManager {
 
     public Epic getEpic(int epicId);
 
-    public ArrayList<SubTask> getAllSubtasksByEpicId(int id);
+    public List<SubTask> getAllSubtasksByEpicId(int id);
 
 
     /**
      * SubTask
      */
-    public ArrayList<SubTask> getSubTasks();
+    public List<SubTask> getSubTasks();
 
     public int createSubTask(SubTask subTask);
 
     public void updateSubTask(SubTask subTask);
 
     public void deleteSubTask(int subTaskId);
-
-    public SubTask getSubTask(int subTaskId);
 
     public SubTask getSubTaskById(int id);
 }

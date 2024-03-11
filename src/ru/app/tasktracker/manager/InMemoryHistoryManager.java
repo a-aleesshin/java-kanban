@@ -17,10 +17,9 @@ public class InMemoryHistoryManager implements IHistoryManager {
         if (task != null) {
             if (historyTasks.size() >= MAX_HISTORY_TASK_SIZE) {
                 historyTasks.remove(0);
-                historyTasks.add(task);
-            } else {
-                historyTasks.add(task);
             }
+
+            historyTasks.add(task);
         } else {
             System.out.println("Task not found");
         }
@@ -28,7 +27,7 @@ public class InMemoryHistoryManager implements IHistoryManager {
 
     @Override
     public List<Task> getHistory() {
-        if (historyTasks == null) {
+        if (historyTasks.isEmpty()) {
             System.out.println("GetHistory empty");
             return new ArrayList<>();
         }

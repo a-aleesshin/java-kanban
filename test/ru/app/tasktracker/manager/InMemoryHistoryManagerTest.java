@@ -3,16 +3,19 @@ package ru.app.tasktracker.manager;
 import org.junit.jupiter.api.Test;
 import ru.app.tasktracker.enums.EStatus;
 import ru.app.tasktracker.task.Task;
+import ru.app.tasktracker.util.Managers;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 class InMemoryHistoryManagerTest {
 
     @Test
     void testAdd() {
-        InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
+        InMemoryHistoryManager historyManager = (InMemoryHistoryManager) Managers.getDefaultHistory();
         Task task = new Task("Задача", EStatus.NEW,"Описание");
 
         historyManager.add(task);
